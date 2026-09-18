@@ -1,4 +1,3 @@
-
 # 🛡️ Projet de Protocoles de Sécurité Réseau - Groupe 08
 
 ## 👥 Membres du Groupe
@@ -39,24 +38,32 @@ Pour pallier les faiblesses des objets connectés face aux attaques par saturati
 
 ---
 
-## 🚀 Installation et Déploiement
+## ⚠️ Limites du Système (Point 6 des consignes)
+Bien que l'infrastructure actuelle sécurise les couches de transport et d'accès, certaines limites subsistent :
+1. **Persistance des Sessions :** Les jetons JWT ne disposent pas de liste de révocation automatique serveur (*Blacklist*) avant leur expiration automatique (1h).
+2. **Absence de Double Facteur (2FA) :** L'authentification repose uniquement sur le modèle Identifiant/Mot de passe, ce qui expose le système si un utilisateur utilise un mot de passe trop faible ou prédictible.
+3. **Stockage Local SQLite :** La base de données SQLite est un fichier local. Pour une infrastructure à grande échelle, une migration vers une base PostgreSQL ou MySQL distante chiffrée serait nécessaire pour assurer la haute disponibilité.
 
-### Déploiement de Démonstration (Production)
-* **URL Publique du Site (Render) :** `https://onrender.com` (À remplacer par votre lien Render une fois généré)
-* **URL du Dépôt GitHub :** (À remplacer par votre lien de dépôt)
+---
 
-### Identifiants de Démonstration pour l'Évaluation
-* **Superviseur (ADMIN) :** `admin` / `AdminPass123!`
-* **Résident (USER) :** `user` / `UserPass123!`
+## 📦 Citations des Dépendances Externes Utilises
+Conformément aux règles d'éthique, voici la liste des modules externes open-source utilisés pour concevoir les briques de sécurité :
+* **`express`** : Framework serveur HTTP.
+* **`jsonwebtoken`** : Implémentation des standards de jetons d'accès.
+* **`bcryptjs`** : Algorithme de hachage et salage de mots de passe.
+* **`sqlite3`** : Moteur de base de données embarqué.
+* **`mqtt`** : Client de connectivité réseau pour les protocoles IoT chiffrés.
+* **`dotenv`** : Gestionnaire de chargement des variables d'environnement isolées.
+
+---
+
+## 🚀 Informations de Démonstration pour l'Évaluation
+
+* **URL Publique du Site (Render) :** [https://onrender.com](https://onrender.com)
+
+### Identifiants de test (Données 100% simulées et fictives)
+* **Superviseur (ADMIN) :** `admin` / `AdminPass123!` (À tester sur la page `/admin-gate.html`)
+* **Résident (USER) :** `user` / `UserPass123!` (À tester sur la page d'accueil `/index.html`)
 * **Invité (GUEST) :** `guest` / `GuestPass123!`
 
-### Exécution en Local
-1. Installez les modules requis :
-   ```bash
-   npm install express jsonwebtoken bcryptjs sqlite3 mqtt dotenv
-   ```
-2. Créez un fichier `.env` à la racine contenant votre variable `JWT_SECRET`.
-3. Démarrez l'instance locale :
-   ```bash
-   node server.js
-   ```
+
