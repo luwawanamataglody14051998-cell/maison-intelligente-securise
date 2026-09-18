@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Authentification Résident - Maison Connectée</title>
+    <link rel="preconnect" href="https://googleapis.com">
+    <link rel="preconnect" href="https://gstatic.com" crossorigin>
+    <link href="https://googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root { 
+            --bg: #090d16; --card: #111827; --primary: #2563eb; --primary-glow: #3b82f6; --text: #f8fafc; --text-muted: #94a3b8; --border: #1f2937;
+            --google-display: 'Google Sans Display', 'Product Sans', 'Roboto', sans-serif;
+            --google-text: 'Google Sans Text', 'Product Sans', 'Roboto', sans-serif;
+        }
+        body { font-family: var(--google-text); background-color: var(--bg); color: var(--text); margin: 0; display: flex; justify-content: center; align-items: center; min-height: 100vh; -webkit-font-smoothing: antialiased; }
+        .auth-card { background: var(--card); width: 100%; max-width: 420px; padding: 40px 35px; border-radius: 20px; box-shadow: 0 0 40px rgba(37, 99, 235, 0.15); border: 1px solid var(--border); box-sizing: border-box; }
+        .brand-title { text-align: center; margin-bottom: 5px; color: #60a5fa; font-size: 24px; font-weight: 700; letter-spacing: -0.5px; font-family: var(--google-display); }
+        .brand-subtitle { text-align: center; font-size: 13px; color: var(--text-muted); margin-bottom: 30px; font-weight: 400; }
+        .form-group { margin-bottom: 20px; }
+        label { display: block; font-size: 12px; font-weight: 600; color: #cbd5e1; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
+        input { width: 100%; padding: 12px 14px; border: 1px solid var(--border); border-radius: 10px; box-sizing: border-box; font-size: 14px; background-color: #0f172a; color: white; transition: all 0.2s; font-family: var(--google-text); }
+        input:focus { border-color: var(--primary-glow); outline: none; box-shadow: 0 0 10px rgba(37, 99, 235, 0.3); }
+        .btn { width: 100%; padding: 13px; color: white; border: none; border-radius: 10px; cursor: pointer; font-weight: 500; font-size: 15px; margin-top: 10px; background: linear-gradient(135deg, #1d4ed8, #2563eb); transition: all 0.2s; font-family: var(--google-text); box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2); }
+        .btn:hover { background: linear-gradient(135deg, #1e40af, #1d4ed8); transform: translateY(-1px); }
+        .admin-link { display: block; text-align: center; margin-top: 25px; font-size: 12px; color: #4b5563; text-decoration: none; transition: color 0.2s; font-weight: 500; }
+        .admin-link:hover { color: #60a5fa; }
+    </style>
+</head>
+<body>
+    <div class="auth-card">
+        <div class="brand-title">MA PORTE</div>
+        <div class="brand-subtitle">verification du resident</div>
+        <div class="form-group">
+            <label>Identifiant de session</label>
+            <input type="text" id="login-username" placeholder=".............">
+        </div>
+        <div class="form-group">
+            <label>Mot de passe </label>
+            <input type="password" id="login-password" placeholder="...........">
+        </div>
+        <button class="btn" onclick="login()">Entrer dans ta maison securisé</button>
+        <a href="/admin-gate.html" class="admin-link">Accès réservé au Superviseur Réseau</a>
+    </div>
+    <script>
+        async function login() {
+            const user = document.getElementById('login-username').value;
+            const pass = document.getElementById('login-password').value;
+            if (!user || !pass) { alert("Veuillez renseigner tous les champs."); return; }
+            try {
+                const response = await fetch('/api/login', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ username: user, password: pass }) });
+                const data = await response.json();
+                if (response.ok) {
+                    localStorage.setItem('token', data.token); localStorage.setItem('username', data.username);
+                    localStorage.setItem('role', data.role); localStorage.setItem('photoUrl', data.photoUrl);
+                    window.location.href = data.role === 'ADMIN' ? '/admin.html' : '/user.html';
+                } else { alert('Erreur : ' + data.error); }
+            } catch (err) { console.error(err); }
+        }
+    </script>
+</body>
+</html>
